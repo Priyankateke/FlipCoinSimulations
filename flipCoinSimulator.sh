@@ -2,8 +2,35 @@
 
 echo "Welcome To Flip Coin Simulation"
 
-if [ $((RANDOM%2)) -eq 0 ]; then
-	echo "Head"
-else
-	echo "Tail"
-fi
+key=""
+
+#dictionary
+declare -A coinCombination
+
+#Function for flipping the coin
+function flipCoin()
+{
+	local flips=$1
+	for(( i=1;i<=flips;i++ ))
+	do
+		if [ $((RANDOM%2)) -eq 0 ]; then
+			key+=H
+		else
+			key+=T
+		fi
+		coinCombination[$key]=$((${coinCombination[$key]}+1))
+		key=""
+	done
+	calculateCombinationPercentage
+}
+
+#Calculating percentage of each combinations
+function calculateCombinationPercentage()
+{
+	for keys in ${!coinCombination[@]}
+	do
+		coinCombination[$keys]=$((${coinCombination[$keys]}*100/$flips))
+	done
+}
+read -p "How many times you want to flips the coin : " flips
+flipCoin $flips
