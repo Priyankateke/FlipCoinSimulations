@@ -1,5 +1,9 @@
 #!/bin/bash -x
 
+readonly SINGLET=1
+readonly DOUBLET=2
+readonly TRIPLET=3
+
 #start flip coin simulation for singlet, doublet
 function startSimulation()
 {
@@ -7,19 +11,22 @@ function startSimulation()
 	read -p "do you want to play the game? if yes press 'y' otherwise press any key for exit :  " play
 	while [  $play == 'y' ]
 	do
-		read -p "How many times do you want to flips the coin? : " flips
-		echo -e "Which combination you want\nEnter your choice\n 1.Singlet\n 2.Doublet\n "
+		read -p "How many times do you want to flips the coin? : " flips	
+		echo -e "Which combination you want\nEnter your choice\n 1.Singlet\n 2.Doublet\n 3.Triplet : "
 		read combination
 		case $combination in
-        1)
-                simulator $flips $combination
-                ;;
-        2)
-                simulator $flips $combination
-                ;;
-        *)
-                echo "Invalid Choice"
-                ;;
+			$SINGLET)
+				simulator $flips $combination
+				;;
+			$DOUBLET)
+				simulator $flips $combination
+				;;
+			$TRIPLET)
+				simulator $flips $combination
+				;;		
+			*)
+				echo "Invalid Choice"
+				;;
 		esac
 		read -p "Do you want to play again? if yes press 'y' otherwise press any key for exit : " play
 	done
@@ -39,11 +46,11 @@ function simulator()
 		coinSides=""
 		for((j=1;j<=combination;j++))
 		do
-				if [[ $(( RANDOM % 2 )) -eq 0 ]]; then
-					coinSides+="H"
-				else
-					coinSides+="T"
-				fi
+			if [[ $(( RANDOM % 2 )) -eq 0 ]]; then
+				coinSides+="H"
+			else
+				coinSides+="T"
+			fi
 		done
 		coinCombination[$coinSides]=$((${coinCombination[$coinSides]}+1))
 	done
